@@ -1,9 +1,12 @@
+package desafio.itau.springboot.model;
+
+import java.time.OffsetDateTime;
+
 public class Transaction {
     private double valor;
-    private OffsetDataTime dataHora;
-    
+    private OffsetDateTime dataHora;
 
-    public Transaction(final double valor, final OffsetDataTime dataHora) {
+    public Transaction(final double valor, final OffsetDateTime dataHora) {
         this.valor = valor;
         this.dataHora = dataHora;
     }
@@ -11,9 +14,8 @@ public class Transaction {
     public double getValor() {
         return valor;
     }
-    public OffsetDataTime getDataHora() {
+
+    public OffsetDateTime getDataHora() {
         return dataHora;
     }
-s
-    
 }

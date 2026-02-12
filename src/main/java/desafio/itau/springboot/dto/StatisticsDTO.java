@@ -1,11 +1,15 @@
-public class StaticsDTO {
+package desafio.itau.springboot.dto;
+
+import java.util.DoubleSummaryStatistics;
+
+public class StatisticsDTO {
     private double sum;
     private double avg;
     private double max;
     private double min;
     private long count;
 
-    public StaticsDTO(DoubleSummaryStatistics statistics) {
+    public StatisticsDTO(DoubleSummaryStatistics statistics) {
         this.sum = statistics.getSum();
         this.avg = statistics.getAverage();
         this.max = statistics.getMax();
@@ -15,17 +19,21 @@ public class StaticsDTO {
 
     public double getSum() {
         return sum;
-    } public double getAvg() {
+    }
+
+    public double getAvg() {
         return avg;
     }
+
     public double getMax() {
         return max;
     }
+
     public double getMin() {
         return min;
     }
+
     public long getCount() {
         return count;
     }
-    
 }

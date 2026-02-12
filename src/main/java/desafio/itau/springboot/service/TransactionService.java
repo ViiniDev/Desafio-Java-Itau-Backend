@@ -1,3 +1,13 @@
+package desafio.itau.springboot.service;
+
+import java.time.OffsetDateTime;
+import java.util.DoubleSummaryStatistics;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.springframework.stereotype.Service;
+import desafio.itau.springboot.model.Transaction;
+
 @Service
 public class TransactionService {
 
@@ -9,12 +19,13 @@ public class TransactionService {
     public void clearTransactions() {
         transactions.clear();
     }
-    public StaticsDTO getStatistics() {
-        DoubleSummaryStatistics statistics = transactions.stream()
-                .filter(t -> t.getDataHora().isAfter(OffsetDateTime.now().minusSeconds(60)))
+    public DoubleSummaryStatistics getStatistics() {
+        OffsetDateTime now = OffsetDateTime.now();
+        return transactions.stream()
+                //.filter(t -> t.getDataHora().isAfter(now.minusSeconds(60)))
                 .mapToDouble(Transaction::getValor)
                 .summaryStatistics();
-        return new StaticsDTO(statistics);
+        
     }
 
 }

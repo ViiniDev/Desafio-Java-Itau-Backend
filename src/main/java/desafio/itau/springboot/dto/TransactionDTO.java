@@ -1,13 +1,20 @@
+package desafio.itau.springboot.dto;
+
+import java.time.OffsetDateTime;
+
+import jakarta.validation.constraints.NotNull;
+
 public class TransactionDTO {
     @NotNull
-    private double valor;
+    private Double valor;
     @NotNull
-    private String dataHora;
+    private OffsetDateTime dataHora;
 
-    public double getValor() {
+    public Double getValor() {
         return valor;
     }
-    public String getDataHora() {
+
+    public OffsetDateTime getDataHora() {
         return dataHora;
     }
 }
