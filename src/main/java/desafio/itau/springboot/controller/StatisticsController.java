@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import desafio.itau.springboot.dto.StatisticsDTO;
 import desafio.itau.springboot.service.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
-@RequestMapping("/estatisticas")
+@RequestMapping("/estatistica")
 public class StatisticsController {
-    @Autowired(required = false)
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
+
+    public StatisticsController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     @GetMapping
     public ResponseEntity<StatisticsDTO> getStatistics() {

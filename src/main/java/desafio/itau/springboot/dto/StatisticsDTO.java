@@ -10,6 +10,15 @@ public class StatisticsDTO {
     private long count;
 
     public StatisticsDTO(DoubleSummaryStatistics statistics) {
+        if (statistics.getCount() == 0) {
+            this.sum = 0;
+            this.avg = 0;
+            this.max = 0;
+            this.min = 0;
+            this.count = 0;
+            return;
+        }
+
         this.sum = statistics.getSum();
         this.avg = statistics.getAverage();
         this.max = statistics.getMax();

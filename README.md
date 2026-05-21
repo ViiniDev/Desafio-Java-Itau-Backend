@@ -1,102 +1,102 @@
-Itaú Backend Challenge – API de Transações e Estatísticas
+# Desafio Java Itaú Backend
 
-Implementação do desafio técnico proposto pelo Itaú Unibanco.
+API REST desenvolvida em Java com Spring Boot para resolver o desafio técnico de transações e estatísticas. A aplicação recebe transações financeiras, mantém os dados em memória e calcula estatísticas das transações realizadas nos últimos 60 segundos.
 
-A aplicação consiste em uma API REST desenvolvida em Java + Spring Boot, responsável por:
+## Objetivo
 
-- Receber transações financeiras
-- Armazená-las exclusivamente em memória
-- Calcular estatísticas das transações ocorridas nos últimos 60 segundos
+Construir uma API aderente às regras do desafio, com entrada e saída em JSON, armazenamento em memória e respostas HTTP compatíveis com os cenários de sucesso e validação.
 
+## Funcionalidades
 
-------------------------------------------------------------
-SOBRE O DESAFIO
-------------------------------------------------------------
+- Cadastro de transações financeiras.
+- Remoção de todas as transações armazenadas.
+- Cálculo de estatísticas em janela móvel de 60 segundos.
+- Validação de transações futuras e valores negativos.
+- Armazenamento em memória, sem banco de dados.
 
-O objetivo é construir uma API que:
+## Tecnologias
 
-- Siga estritamente os endpoints especificados
-- Armazene dados apenas em memória (sem banco ou cache)
-- Retorne estatísticas baseadas em uma janela móvel de 60 segundos
-- Utilize apenas JSON para entrada e saída
-- Respeite rigorosamente os códigos HTTP exigidos
-
-
-------------------------------------------------------------
-TECNOLOGIAS UTILIZADAS
-------------------------------------------------------------
-
-- Java 17+
-- Spring Boot
+- Java 17
+- Spring Boot 4.0.2
+- Spring Web MVC
+- Bean Validation
 - Maven
-- Spring Validation
 
+## Estrutura do Projeto
 
-------------------------------------------------------------
-ARQUITETURA
-------------------------------------------------------------
+```text
+src/main/java/desafio/itau/springboot
+├── controller
+│   ├── StatisticsController.java
+│   └── TransactionController.java
+├── dto
+│   ├── StatisticsDTO.java
+│   └── TransactionDTO.java
+├── model
+│   └── Transaction.java
+├── service
+│   └── TransactionService.java
+└── SpringbootApplication.java
+```
 
-Estrutura em camadas:
+## Como Executar
 
-controller → service → repository (in-memory)
+```bash
+./mvnw spring-boot:run
+```
 
-Princípios aplicados:
+No Windows:
 
-- Separação de responsabilidades
-- Código limpo e legível
-- Alta coesão
-- Baixo acoplamento
+```bash
+mvnw.cmd spring-boot:run
+```
 
+A aplicação ficará disponível em:
 
-------------------------------------------------------------
-ENDPOINTS
-------------------------------------------------------------
+```text
+http://localhost:8080
+```
 
-1) POST /transacao
+## Endpoints
 
-Recebe uma nova transação.
+### Criar transação
 
-Request JSON:
+```http
+POST /transacao
+```
 
+```json
 {
   "valor": 123.45,
   "dataHora": "2026-02-12T12:34:56.789-03:00"
 }
-
-Regras de validação:
-
-- valor é obrigatório
-- dataHora é obrigatória
-- valor deve ser maior ou igual a 0
-- A transação não pode ocorrer no futuro
-- JSON deve estar válido
+```
 
 Respostas:
 
-201 - Transação aceita
-422 - Transação inválida
-400 - JSON inválido
+- `201 Created`: transação aceita.
+- `422 Unprocessable Entity`: transação com valor negativo ou data futura.
+- `400 Bad Request`: JSON inválido ou campos ausentes.
 
+### Limpar transações
 
-------------------------------------------------------------
-
-2) DELETE /transacao
-
-Remove todas as transações armazenadas.
+```http
+DELETE /transacao
+```
 
 Resposta:
 
-200 OK
+- `200 OK`
 
+### Consultar estatísticas
 
-------------------------------------------------------------
+```http
+GET /estatistica
+```
 
-3) GET /estatistica
+Exemplo de resposta:
 
-Retorna estatísticas das transações ocorridas nos últimos 60 segundos.
-
-Response JSON:
-
+```json
 {
   "count": 10,
   "sum": 1234.56,
@@ -104,96 +104,21 @@ Response JSON:
   "min": 12.34,
   "max": 123.56
 }
+```
 
-Regras:
+Quando não houver transações nos últimos 60 segundos, todos os valores retornam `0`.
 
-- Considera apenas transações da janela de 60 segundos
-- Caso não existam transações no período, todos os valores retornam 0
+## Regras de Negócio
 
+- Transações são armazenadas apenas em memória.
+- Apenas transações dos últimos 60 segundos entram no cálculo estatístico.
+- Transações futuras são recusadas.
+- Valores negativos são recusados.
+- Valores iguais a zero são aceitos.
 
-------------------------------------------------------------
-ESTRATÉGIA DE IMPLEMENTAÇÃO
-------------------------------------------------------------
+## Melhorias Futuras
 
-- Uso de OffsetDateTime para compatibilidade com ISO 8601
-- Armazenamento em estrutura de dados em memória
-- Filtragem dinâmica baseada em OffsetDateTime.now()
-- Cálculo estatístico utilizando DoubleSummaryStatistics
-
-Complexidade:
-
-- Inserção: O(1)
-- Cálculo: O(n), considerando apenas a janela ativa
-
-
-------------------------------------------------------------
-TESTES AUTOMATIZADOS
-------------------------------------------------------------
-
-O projeto contém:
-
-- Testes unitários de service
-- Testes de validação
-- Testes para cenários inválidos
-- Testes para ausência de transações
-
-Os testes cobrem tanto fluxos positivos quanto negativos.
-
-
-------------------------------------------------------------
-EXECUTANDO O PROJETO
-------------------------------------------------------------
-
-1) Clonar o repositório
-
-git clone https://github.com/ViiniDev/Desafio-Java-Itau-Backend.git
-
-
-2) Executar aplicação
-
-Via Maven Wrapper:
-
-./mvnw spring-boot:run
-
-Ou:
-
-mvn clean install
-java -jar target/*.jar
-
-A aplicação estará disponível em:
-
-http://localhost:8080
-
-
-
-------------------------------------------------------------
-PONTOS TÉCNICOS IMPORTANTES
-------------------------------------------------------------
-
-- 100% aderente às regras do desafio
-- Nenhum banco de dados utilizado
-- Nenhum cache externo
-- Estritamente JSON
-- Endpoints nomeados exatamente conforme especificação
-- Commits separados por endpoint conforme solicitado
-
-
-------------------------------------------------------------
-AUTOR
-------------------------------------------------------------
-
-Vinicius Arruda
-https://viinidev.com/
-
-
-------------------------------------------------------------
-CONSIDERAÇÕES FINAIS
-------------------------------------------------------------
-
-Projeto desenvolvido com foco em:
-
-- Clareza arquitetural
-- Precisão nas validações
-- Conformidade com especificação
-- Código limpo e testável
-- Performance adequada para o contexto do desafio
+- Adicionar testes unitários específicos para a janela de 60 segundos.
+- Criar tratamento global de exceções para padronizar respostas.
+- Adicionar documentação OpenAPI.
+- Adicionar pipeline de CI para execução automática dos testes.
